@@ -1,0 +1,115 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Choice</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <style>
+    body {
+      background-color: pink;
+      font-family: 'Comic Sans MS', 'Cursive', sans-serif;
+      text-align: center;
+      padding-top: 15vh;
+      overflow: hidden; /* Prevents scrollbars if the 'No' button moves near edges */
+    }
+    h1 {
+      color: red;
+      font-size: 3em;
+      text-shadow: 2px 2px 5px white;
+      margin-bottom: 50px;
+    }
+    .container {
+      position: relative;
+      height: 200px;
+    }
+    button {
+      font-size: 1.5em;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    #yes {
+      background-color: #ff4d4d;
+      color: white;
+      position: relative;
+      z-index: 1;
+    }
+    #no {
+      background-color: white;
+      color: #ff4d4d;
+      position: absolute;
+      /* Initial position slightly to the right of center */
+      left: 55%; 
+    }
+    /* Simple pulse animation for the Yes button */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    #yes:hover {
+      animation: pulse 0.8s infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Will you be my Valentine Chuttappi? ❤️</h1>
+
+  <div class="container">
+    <button id="yes" onclick="celebrate()">Yes</button>
+    <button id="no">No</button>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('no');
+    const yesBtn = document.getElementById('yes');
+
+    // Function to move the "No" button
+    function moveNoButton() {
+      // Calculate random positions, staying within the visible screen
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+
+    // Move on mouse hover
+    noBtn.addEventListener('mouseover', moveNoButton);
+
+    // Move on mobile tap (prevents the 'click' from happening)
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    function celebrate() {
+      // 1. Fire the confetti!
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff0000', '#ff69b4', '#ffffff']
+      });
+
+      // 2. Change the heading
+      document.querySelector('h1').innerHTML = "Yay! I knew you'd say yes! ❤️";
+      
+      // 3. Hide the 'No' button permanently
+      noBtn.style.display = 'none';
+      
+      // 4. Transform the 'Yes' button
+      yesBtn.style.transform = "scale(1.5)";
+      yesBtn.style.backgroundColor = "#ff0000";
+      yesBtn.innerHTML = "Best Day Ever! ✨";
+      yesBtn.onclick = null; // Disable further clicks
+    }
+  </script>
+</body>
+</html>
